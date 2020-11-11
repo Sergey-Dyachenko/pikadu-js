@@ -191,10 +191,14 @@ body {
   width: 31%;
 }
 .user {
-  display:none;
+  display:block;
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
   padding: 15px 25px;
+
+}
+
+.user-container{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -270,6 +274,7 @@ body {
 }
 
 .user-info {
+  margin-right: auto;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -277,6 +282,7 @@ body {
 .user-avatar {
   border-radius: 50%;
   margin-right: 17px;
+  object-fit: cover;
 }
 .user-name {
   font-weight: 600;
@@ -284,6 +290,57 @@ body {
   line-height: 24px;
   color: #595959;
 }
+
+.edit-container{
+  display: none;
+}
+
+.edit-container.visible{
+  display: block;
+}
+
+.edit{
+  margin-right:10px;
+  display: block;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.edit-title{
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #595959;
+}
+
+.edit-input{
+  display: block;
+  margin:0 auto;
+  width:100%;
+  padding: 5px 10px;
+}
+
+.edit-btn{
+  background-color: #fa8c16;
+  border:none;
+  border-radius: 2px;
+  text-transform: uppercase;
+  cursor:pointer;
+  line-height: 32px;
+  font-size: 15px;
+  margin-top: 10px;
+  text-align: center;
+  width:100%
+}
+
+.icon-edit {
+  width: 20px;
+  height: 20px;
+  fill: #000;
+}
+
 .icon-exit {
   width: 20px;
   height: 20px;

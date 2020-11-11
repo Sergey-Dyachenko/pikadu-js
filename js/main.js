@@ -10,17 +10,21 @@ menuToggle.addEventListener('click', function (event) {
   menu.classList.toggle('visible');
 })
 
+const regExpValidEmail = /^\w+@\w+\.\w{2,}$/;
 const loginElem = document.querySelector('.login');
 const loginForm = document.querySelector('.login-form');
 const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const loginSignup = document.querySelector('.login-signup');
-
+const exitElem = document.querySelector('.exit');
+const editElem = document.querySelector('.edit');
 
 const userElem = document.querySelector('.user');
 const userNameElem = document.querySelector('.user-name')
-
-
+const editContainer = document.querySelector('.edit-container')
+const editUserName = document.querySelector('.edit-username');
+const editPhotoURL = document.querySelector('.edit-photo');
+const userAvatarElem = document.querySelector('.user-avatar');
 
 const listUsers = [
   {
@@ -41,6 +45,10 @@ const setUsers = {
   user: null,
 
   logIn(email, password, handler){
+    if (!regExpValidEmail.test(email)){
+        alert('email не валиден')
+        return
+    }
     const user = this.getUser(email);
     if (user && user.password === password){
       this.authorizedUser(user);
@@ -51,9 +59,14 @@ const setUsers = {
     }
   },
 
-  logOut(){
-    сonsole.log('выход');
+
+
+  logOut(handler){
+    this.user=null
+    handler();
   },
+
+
   
   validateEmail(email){
     var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
@@ -62,11 +75,16 @@ const setUsers = {
 
   signUp(email, password, handler){
     const user = this.getUser(email);
-    if(this.validateEmail(email)){
+    if(!email.trim() || !password.trim()){
+      alert('Введите данные!')
+      return
+    }
+    if (!regExpValidEmail.test(email)){
+      alert('email не валиден')
+      return
+    }
       if (!this.getUser(email)){
-        
-      
-        
+          
         listUsers.push({email, password, displayName: this.getDisplayName(email)})
         this.authorizedUser(user)
         handler();
@@ -74,10 +92,17 @@ const setUsers = {
       } else{
         alert('Пользователь с таким e-mail уже зарегестирован')
       }
-    }
-    else{
-      alert('Введенный e-mail не валидный')
-    }
+    
+   
+  },
+  editUserName(userName, userPhoto = '', handler){
+      if(userName){
+        this.user.displayName = userName;
+      }
+      if (userPhoto){
+        this.user.photo = userPhoto;
+      }
+      handler()
   },
   getUser(email){
     console.log(email);
@@ -99,6 +124,7 @@ const toggleAuthDom = () => {
     loginElem.style.display = 'none';
     userElem.style.display = '';
     userNameElem.textContent = user.displayName;
+    userAvatarElem.src = user.photo ? user.photo : userAvatarElem.src;
   }
   else{
     loginElem.style.display = '';
@@ -113,6 +139,7 @@ loginForm.addEventListener('submit', event => {
   const emailValue = emailInput.value;
   const passwordValue = passwordInput.value;
   setUsers.logIn(emailValue, passwordValue, toggleAuthDom);
+  loginForm.reset();
 });
 
 loginSignup.addEventListener('click', event => {
@@ -120,7 +147,24 @@ loginSignup.addEventListener('click', event => {
   const emailValue = emailInput.value;
   const passwordValue = passwordInput.value;
   setUsers.signUp(emailValue, passwordValue, toggleAuthDom);
+  // loginSignup.reset();
 })
 
+exitElem.addEventListener('click', event => {
+  event.preventDefault();
+  setUsers.logOut(toggleAuthDom);
+})
+
+editElem.addEventListener('click', event => {
+  event.preventDefault();
+  editContainer.classList.toggle('visible');
+  editUserName.value = setUsers.user.displayName;
+})
+
+editContainer.addEventListener('submit', event => {
+  event.preventDefault();
+  setUsers.editUserName(editUserName.value, editPhotoURL.value, toggleAuthDom)
+  editContainer.classList.remove('visible');
+})
 
 toggleAuthDom();
